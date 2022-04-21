@@ -12,6 +12,7 @@ help() {
   echo "dev_server -- Intall and bundle the extensions, start the server in development mode"
   echo "dev_worker -- Install the extensions, start the worker in development mode"
   echo "dev_scheduler -- Install the extensions, start the scheduler in development mode"
+  echo "create_db -- Install the extensions, create the database schema"
   echo "help -- Display this help page"
 }
 
@@ -53,6 +54,11 @@ dev_scheduler() {
   /app/bin/docker-entrypoint dev_scheduler
 }
 
+create_db() {
+  install_extensions
+  /app/bin/docker-entrypoint create_db
+}
+
 case "$1" in
   dev_server)
     shift
@@ -65,6 +71,10 @@ case "$1" in
   dev_scheduler)
     shift
     dev_scheduler
+    ;;
+  create_db)
+    shift
+    create_db
     ;;
   bundle_extensions)
     shift
