@@ -1,0 +1,6 @@
+FROM redash:latest 
+
+USER redash
+
+ENTRYPOINT ["/app/ext-lib/docker-entrypoint"]
+CMD [ "server" ]

@@ -4,7 +4,7 @@ compose_build:
 	docker-compose build
 
 up:
-	docker-compose up -d --build
+	docker-compose up -d 
 
 test_db:
 	@for i in `seq 1 5`; do \
@@ -55,3 +55,30 @@ redis-cli:
 
 bash:
 	docker-compose run --rm server bash
+
+docker-build:
+	docker build --tag redash:latest . --build-arg skip_frontend_build="true"
+
+bundle-extensions:
+	docker-compose exec server /app/ext-lib/docker-entrypoint bundle_extensions
+
+frontend-clean:
+	docker-compose run frontend yarn clean
+
+frontend-build:
+	docker-compose run frontend yarn install 
+	docker-compose run frontend yarn build
+
+frontend-restart:
+	docker-compose stop frontend
+	docker-compose up -d 
+
+server-restart:
+	docker-compose stop server
+	docker-compose up -d
+
+all-restart:
+	docker-compose stop server
+	docker-compose stop worker
+	docker-compose stop scheduler
+	docker-compose up -d

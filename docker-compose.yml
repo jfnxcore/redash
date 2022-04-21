@@ -4,10 +4,11 @@ version: "2.2"
 x-redash-service: &redash-service
   build:
     context: .
-    args:
-      skip_frontend_build: "true"
+    dockerfile: ./ext-lib/Dockerfile.service
+  image: redash:latest
   volumes:
     - .:/app
+    - ./extensions:/extensions
   env_file:
     - .env
 x-redash-environment: &redash-environment
@@ -20,6 +21,22 @@ x-redash-environment: &redash-environment
   REDASH_ENFORCE_CSRF: "true"
   # Set secret keys in the .env file
 services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./ext-lib/Dockerfile.webpack
+    command: yarn start
+    volumes:
+      - .:/app
+      - ./ext-lib/webpack.config.js:/app/webpack.config.js
+    depends_on:
+      - server
+    env_file:
+      - .env
+    environment:
+      - REDASH_BACKEND=http://server:5000
+    ports:
+      - "8080:8080"
   server:
     <<: *redash-service
     command: dev_server

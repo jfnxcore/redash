@@ -1,0 +1,3 @@
+[submodule "extensions/candlestick"]
+	path = extensions/candlestick
+	url = git@github.com:jfnxcore/redash-candlestick.git

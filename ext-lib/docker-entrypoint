@@ -1,0 +1,84 @@
+#!/bin/bash
+set -e
+
+help() {
+  echo "Redash Extensions in Docker Development."
+  echo ""
+  echo "Usage:"
+  echo ""
+
+  echo "install_extensions -- Install all the available extensions"
+  echo "bundle_extensions -- Bundle the extensions by invoking the /app/bin/bundle-extensions"
+  echo "dev_server -- Intall and bundle the extensions, start the server in development mode"
+  echo "dev_worker -- Install the extensions, start the worker in development mode"
+  echo "dev_scheduler -- Install the extensions, start the scheduler in development mode"
+  echo "help -- Display this help page"
+}
+
+install_extensions() {
+  if [ -d "/extensions" ]; then
+    for f in "/extensions/"*; do
+      # always install inside the running container
+      pushd "$f"
+      pip install -e ".[dev,test]"
+      pip install -U coverage
+
+      popd
+    done
+  fi
+}
+
+bundle_extensions() {
+  if [ -d "/extensions" ]; then
+    rm -rf /app/client/app/extensions
+    pushd /extensions
+    /app/bin/bundle-extensions
+    popd
+  fi
+}
+
+dev_server() {
+  install_extensions
+  bundle_extensions
+  /app/bin/docker-entrypoint dev_server
+}
+
+dev_worker() {
+  install_extensions
+  /app/bin/docker-entrypoint dev_worker
+}
+
+dev_scheduler() {
+  install_extensions
+  /app/bin/docker-entrypoint dev_scheduler
+}
+
+case "$1" in
+  dev_server)
+    shift
+    dev_server
+    ;;
+  dev_worker)
+    shift
+    dev_worker
+    ;;
+  dev_scheduler)
+    shift
+    dev_scheduler
+    ;;
+  bundle_extensions)
+    shift
+    bundle_extensions
+    ;;
+  install_extensions)
+    shift
+    install_extensions
+    ;;
+  help)
+    shift
+    help
+    ;;
+  *)
+    exec /app/bin/docker-entrypoint $*
+    ;;
+esac

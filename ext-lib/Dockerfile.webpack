@@ -1,0 +1,10 @@
+FROM node:14.17
+
+EXPOSE 8080
+
+RUN npm install --global --force yarn@1.22.10
+ENV PATH /usr/node_modules/.bin:/app/node_modules/.bin:$PATH
+
+ENTRYPOINT [ "/app/ext-lib/docker-entrypoint" ]
+
+WORKDIR /app
