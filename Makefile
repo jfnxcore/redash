@@ -82,3 +82,5 @@ all-restart:
 	docker-compose stop worker
 	docker-compose stop scheduler
 	docker-compose up -d
+
+build_up: compose_build up

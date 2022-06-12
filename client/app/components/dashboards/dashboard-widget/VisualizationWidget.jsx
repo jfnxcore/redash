@@ -274,7 +274,7 @@ class VisualizationWidget extends React.Component {
   };
 
   renderVisualization() {
-    const { widget, filters } = this.props;
+    const { widget, filters, onRefresh } = this.props;
     const widgetQueryResult = widget.getQueryResult();
     const widgetStatus = widgetQueryResult && widgetQueryResult.getStatus();
     switch (widgetStatus) {
@@ -296,6 +296,7 @@ class VisualizationWidget extends React.Component {
               queryResult={widgetQueryResult}
               filters={filters}
               onFiltersChange={this.onLocalFiltersChange}
+              onRefresh={onRefresh}
               context="widget"
             />
           </div>

@@ -39,7 +39,7 @@ services:
       - "8080:8080"
   server:
     <<: *redash-service
-    command: dev_server
+    command: debug
     depends_on:
       - postgres
       - redis

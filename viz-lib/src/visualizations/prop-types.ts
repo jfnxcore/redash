@@ -35,6 +35,7 @@ export const RendererPropTypes = {
   data: Data.isRequired,
   options: VisualizationOptions.isRequired,
   onOptionsChange: PropTypes.func, // (newOptions) => void
+  onRefresh: PropTypes.func,
 };
 
 // For each visualization's editor

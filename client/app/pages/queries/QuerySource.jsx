@@ -218,6 +218,7 @@ function QuerySource(props) {
                   loading={!dataSourcesLoaded}
                   onChange={handleDataSourceChange}
                 />
+                <DynamicComponent name="SelectDataSourceExtra" dataSourceId={dataSource ? dataSource.id : undefined} />
               </div>
             )}
             <div className="editor__left__schema">

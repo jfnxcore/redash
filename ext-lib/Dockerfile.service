@@ -1,6 +1,7 @@
 FROM redash:latest 
 
 USER redash
+ENV PATH /home/redash/.local/lib/python3.7/site-packages:$PATH
 
 ENTRYPOINT ["/app/ext-lib/docker-entrypoint"]
 CMD [ "server" ]

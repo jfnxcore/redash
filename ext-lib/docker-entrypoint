@@ -29,6 +29,19 @@ install_extensions() {
   fi
 }
 
+develop_extensions() {
+  if [ -d "/extensions" ]; then
+    for f in "/extensions/"*; do
+      # always install inside the running container
+      pushd "$f"
+      python setup.py build
+      python setup.py develop --install-dir /home/redash/.local/lib/python3.7/site-packages
+
+      popd
+    done
+  fi
+}
+
 bundle_extensions() {
   if [ -d "/extensions" ]; then
     rm -rf /app/client/app/extensions
@@ -36,6 +49,28 @@ bundle_extensions() {
     /app/bin/bundle-extensions
     popd
   fi
+}
+
+server() {
+  install_extensions
+  bundle_extensions
+  /app/bin/docker-entrypoint server
+}
+
+worker() {
+  install_extensions
+  /app/bin/docker-entrypoint worker
+}
+
+scheduler() {
+  install_extensions
+  /app/bin/docker-entrypoint scheduler
+}
+
+debug() {
+  develop_extensions
+  bundle_extensions
+  /app/bin/docker-entrypoint debug
 }
 
 dev_server() {
@@ -60,6 +95,22 @@ create_db() {
 }
 
 case "$1" in
+  worker)
+    shift
+    worker
+    ;;
+  server)
+    shift
+    server
+    ;;
+  scheduler)
+    shift
+    scheduler
+    ;;
+  debug)
+    shift
+    debug
+    ;;
   dev_server)
     shift
     dev_server
