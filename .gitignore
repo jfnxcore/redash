@@ -17,7 +17,7 @@ client/dist
 _build
 .vscode
 .env
-
+docker-compose-*.y*ml
 dump.rdb
 
 node_modules
@@ -25,8 +25,7 @@ node_modules
 .sass-cache
 npm-debug.log
 
-extenions
-client/extenions
+extensions
+client/extensions
 client/cypress/screenshots
 client/cypress/videos
-/**
